@@ -1,0 +1,22 @@
+version: '3'
+services:
+    conangcc54arm:
+        build:
+            context: gcc54arm
+            dockerfile: Dockerfile
+        image: "uilianries/conangcc54arm:latest"
+        container_name: conangcc54arm
+        volumes:
+          - /tmp/install:/tmp/install
+        tty: true
+        stdin_open: true
+    conangcc63arm:
+        build:
+            context: gcc63arm
+            dockerfile: Dockerfile
+        image: "uilianries/conangcc63arm:latest"
+        container_name: conangcc63arm
+        volumes:
+          - /tmp/install:/tmp/install
+        tty: true
+        stdin_open: true
