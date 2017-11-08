@@ -2,10 +2,7 @@ FROM lasote/conangcc54:latest
 
 LABEL maintainer="Uilian Ries <uilianries@gmail.com>"
 
-ENV PATH="${PATH}:/opt/gcc-linaro/bin" \
-    CC=arm-linux-gnueabihf-gcc \
-    CXX=arm-linux-gnueabihf-g++ \
-    SYSROOT=/opt/sysroot
+ENV PATH="${PATH}:/opt/gcc-linaro/bin"
 
 RUN wget -q -O /tmp/libssl-dev_1.0.2g-1ubuntu4.9_armhf.deb http://launchpadlibrarian.net/344119130/libssl-dev_1.0.2g-1ubuntu4.9_armhf.deb \
     && dpkg-deb -x /tmp/libssl-dev_1.0.2g-1ubuntu4.9_armhf.deb /tmp/libssl-dev \
