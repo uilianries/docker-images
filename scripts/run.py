@@ -22,12 +22,12 @@ if __name__ == "__main__":
         print("Skiping upload, branch %s is not stable" % branch)
         sys.exit(0)
 
-    if not password:
-        print("Could not upload, password was not defined.")
-        sys.exit(1)
-
     if not username:
         print("Could not upload, username was not defined.")
+        sys.exit(1)
+
+    if not password:
+        print("Could not upload, password was not defined.")
         sys.exit(1)
 
     subprocess.check_call(["docker", "login", "-u", username, "-p", password])
