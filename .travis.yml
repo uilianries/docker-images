@@ -6,6 +6,8 @@ services:
   - docker
 
 env:
+  variable:
+    - DOCKER_UPLOAD=1
   matrix:
     - DOCKER_SERVICE="conangcc54arm"
     - DOCKER_SERVICE="conangcc63arm"
@@ -15,4 +17,4 @@ script:
   - docker-compose build ${DOCKER_SERVICE}
 
 after_success:
-  - scripts/deploy.sh
+  - python scripts/deploy.py
