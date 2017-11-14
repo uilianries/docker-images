@@ -5,8 +5,8 @@ import sys
 import subprocess
 
 if __name__ == "__main__":
-    username = os.getenv("DOCKER_USERNAME", None)
-    password = os.getenv("DOCKER_PASSWORD", None)
+    username = os.getenv("DOCKER_USERNAME", "")
+    password = os.getenv("DOCKER_PASSWORD", "").replace('"', '\\"')
     upload = os.getenv("DOCKER_UPLOAD", False)
     branch = os.getenv("TRAVIS_BRANCH", "")
     stable_branch = os.getenv("DOCKER_STABLE_BRANCH", "master")
