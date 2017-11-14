@@ -6,15 +6,13 @@ services:
   - docker
 
 env:
+  global:
+    - DOCKER_UPLOAD="TRUE"
+    
   matrix:
     - DOCKER_SERVICE="conangcc54arm"
     - DOCKER_SERVICE="conangcc63arm"
     - DOCKER_SERVICE="conangcc47"
 
 script:
-  - docker-compose build ${DOCKER_SERVICE}
-
-after_success:
-  variable:
-    - DOCKER_UPLOAD="TRUE"
-  - python scripts/deploy.py
+  - python scripts/run.py

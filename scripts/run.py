@@ -10,6 +10,9 @@ if __name__ == "__main__":
     upload = os.getenv("DOCKER_UPLOAD", False)
     branch = os.getenv("TRAVIS_BRANCH", "")
     stable_branch = os.getenv("DOCKER_STABLE_BRANCH", "master")
+    service = os.getenv("DOCKER_SERVICE", "")
+
+    subprocess.check_call(["docker-compose", "build", service])
 
     if not upload:
         print("Skiping upload, the option is disabled.")
