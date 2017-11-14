@@ -31,4 +31,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     subprocess.check_call(["docker", "login", "-u", username, "-p", password])
-    subprocess.check_call(["docker-compose", "push"])
+    subprocess.check_call(["docker-compose", "push", service])
