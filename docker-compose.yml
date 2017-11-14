@@ -4,7 +4,7 @@ services:
         build:
             context: gcc54arm
             dockerfile: Dockerfile
-        image: "uilianries/conangcc54arm:latest"
+        image: "${DOCKER_USERNAME}/conangcc54arm:${DOCKER_BUILD_TAG}"
         container_name: conangcc54arm
         volumes:
           - /tmp/install:/tmp/install
@@ -14,8 +14,18 @@ services:
         build:
             context: gcc63arm
             dockerfile: Dockerfile
-        image: "uilianries/conangcc63arm:latest"
+        image: "${DOCKER_USERNAME}/conangcc63arm:${DOCKER_BUILD_TAG}"
         container_name: conangcc63arm
+        volumes:
+          - /tmp/install:/tmp/install
+        tty: true
+        stdin_open: true
+    conangcc47:
+        build:
+            context: gcc47
+            dockerfile: Dockerfile
+        image: "${DOCKER_USERNAME}/conangcc47:${DOCKER_BUILD_TAG}"
+        container_name: conangcc47
         volumes:
           - /tmp/install:/tmp/install
         tty: true

@@ -1,0 +1,13 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+script:
+  - docker-compose build
+
+deploy:
+  - docker login -p ${DOCKER_PASSWORD} -u ${DOCKER_USERNAME}
+  - docker-compose push
