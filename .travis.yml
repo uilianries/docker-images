@@ -9,5 +9,7 @@ script:
   - docker-compose build
 
 deploy:
-  - docker login -p ${DOCKER_PASSWORD} -u ${DOCKER_USERNAME}
-  - docker-compose push
+  provider: script
+  script: scripts/deploy.sh
+  on:
+    branch: master
