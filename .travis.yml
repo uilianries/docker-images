@@ -5,8 +5,13 @@ language: python
 services:
   - docker
 
+matrix:
+  - DOCKER_SERVICE="conangcc54arm"
+  - DOCKER_SERVICE="conangcc63arm"
+  - DOCKER_SERVICE="conangcc47"
+
 script:
-  - docker-compose build
+  - docker-compose build ${DOCKER_SERVICE}
 
 deploy:
   provider: script
