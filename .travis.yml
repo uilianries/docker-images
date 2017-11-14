@@ -16,6 +16,6 @@ script:
 
 deploy:
   provider: script
-  script: scripts/deploy.sh
+  script: env DOCKER_USERNAME=${DOCKER_USERNAME} DOCKER_PASSWORD=${DOCKER_PASSWORD} scripts/deploy.sh
   on:
     branch: master
