@@ -53,7 +53,7 @@ class Runner(object):
                                         "-s", "arch=x86", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
         finally:
-            subprocess.check_call(["docker-compose", "rm", "-sf"])
+            subprocess.call(["docker-compose", "rm", "-sf"])
 
     def deploy(self):
         if not self.upload:
