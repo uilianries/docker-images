@@ -41,6 +41,35 @@ RUN $ErrorActionPreference = 'Stop'; \
     $p = Start-Process -Wait -PassThru -FilePath C:\vs_buildtools.exe -ArgumentList '--quiet --nocache --wait --installPath C:\BuildTools'; \
     if ($ret = $p.ExitCode) { c:\collect.exe; throw ('Install failed with exit code 0x{0:x}' -f $ret) }
 
+ENV CMAKE_RELEASE 3.9
+ENV CMAKE_VERSION 3.9.6
+
+RUN $url = ('https://cmake.org/files/v{0}/cmake-{1}-win64-x64.msi' -f $env:CMAKE_RELEASE, $env:CMAKE_VERSION); \
+	  Write-Host ('Downloading {0} ...' -f $url); \
+	  Invoke-WebRequest -Uri $url -OutFile 'cmake.msi'; \
+	  \
+	  Write-Host 'Installing ...'; \
+    Start-Process msiexec -Wait \
+      -ArgumentList @( \
+        '/i', \
+        'cmake.msi', \
+        '/quiet', \
+        '/qn', \
+        'TARGETDIR=C:\CMake', \
+        'ALLUSERS=1', \
+        'ADDLOCAL=DefaultFeature,Extensions,TclTk,Tools,PrependPath' \
+        ); \
+	  \
+    $env:PATH = [Environment]::GetEnvironmentVariable('PATH', [EnvironmentVariableTarget]::Machine); \
+    \
+    Write-Host 'Verifying install ...'; \
+    Write-Host '  cmake --version'; cmake --version; \
+    \
+    Write-Host 'Removing ...'; \
+    Remove-Item cmake.msi -Force; \
+    \
+    Write-Host 'Complete.';
+
 ENV PYTHON_VERSION 2.7.14
 ENV PYTHON_RELEASE 2.7.14
 
