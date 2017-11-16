@@ -30,7 +30,7 @@ services:
           - /tmp/install:/tmp/install
         tty: true
         stdin_open: true
-    msvc15:
+    conanmsvc15:
         build:
             context: msvc15
             dockerfile: Dockerfile
