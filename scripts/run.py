@@ -8,9 +8,11 @@ if __name__ == "__main__":
     username = os.getenv("DOCKER_USERNAME", "")
     password = os.getenv("DOCKER_PASSWORD", "").replace('"', '\\"')
     upload = os.getenv("DOCKER_UPLOAD", False)
-    branch = os.getenv("TRAVIS_BRANCH", "")
+    travis_branch = os.getenv("TRAVIS_BRANCH", "")
+    appveyor_branch = os.getenv("APPVEYOR_REPO_BRANCH","")
     stable_branch = os.getenv("DOCKER_STABLE_BRANCH", "master")
     service = os.getenv("DOCKER_SERVICE", "")
+    branch = travis_branch if travis_branch != "" else appveyor_branch
 
     subprocess.check_call(["docker-compose", "build", service])
 
