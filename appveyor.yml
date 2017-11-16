@@ -1,0 +1,19 @@
+build: false
+
+environment:
+    PYTHON: "C:\\Python27"
+    PYTHON_VERSION: "2.7.8"
+    PYTHON_ARCH: "32"
+
+    VS150COMNTOOLS: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\Common7\\Tools\\"
+    DOCKER_UPLOAD: "TRUE"
+
+    matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          DOCKER_SERVICE: "conanmsvc15"
+
+install:
+  - set PATH=%PATH%;%PYTHON%/Scripts/
+
+test_script:
+  - python scripts/run.py

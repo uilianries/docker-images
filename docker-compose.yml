@@ -30,3 +30,11 @@ services:
           - /tmp/install:/tmp/install
         tty: true
         stdin_open: true
+    msvc15:
+        build:
+            context: msvc15
+            dockerfile: Dockerfile
+        image: "${DOCKER_USERNAME}/conanmsvc15:${DOCKER_BUILD_TAG}"
+        container_name: conanmsvc15
+        tty: true
+        stdin_open: true
