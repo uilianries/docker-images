@@ -8,7 +8,7 @@ SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 
 ENV chocolateyUseWindowsCompression=false \
     PYTHONIOENCODING=UTF-8 \
-    VS150COMNTOOLS="C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\Common7\\Tools\\"
+    VS140COMNTOOLS="C:\\Program Files (x86)\\Microsoft Visual Studio\\2015\\BuildTools\\Common7\\Tools\\"
 	
 RUN Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
@@ -17,8 +17,7 @@ RUN pip install --no-cache-dir conan conan-package-tools win-unicode-console
 
 RUN choco install --yes cmake --installargs 'ADD_CMAKE_TO_PATH=""System""'
 
-RUN choco install --yes microsoft-build-tools
-RUN choco install --yes visualcpp-build-tools
+RUN choco install --yes VisualCppBuildTools -packageParameters "--Features Win81SDKCppBuildSKUV1"
 
 RUN Write-Host 'Updating PATH ...'; \
     $env:PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools;' + $env:PATH; \
