@@ -38,12 +38,14 @@ class Runner(object):
                                         "-s", "arch=armv7", "-s", "compiler=gcc", "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
             else:
+                if sys.platform() == "Windows":
+                    subprocess.call(["docker-compose", "exec", self.service, "Get-NetNat", "|", "Remove-NetNat"])
                 subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
                                         "-s", "arch=x86", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
                 subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
-                                    "-s", "arch=x86_64", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
-                                    "--build"])
+                                        "-s", "arch=x86_64", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
+                                        "--build"])
                 subprocess.check_call(["docker-compose", "exec", self.service, "conan", "remote", "add", "conan-community",
                                    "https://api.bintray.com/conan/conan-community/conan", "--insert"])
                 subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "gtest/1.8.0@conan/stable",
