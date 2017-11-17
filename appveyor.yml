@@ -11,6 +11,8 @@ environment:
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
           DOCKER_SERVICE: "conanmsvc15"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+          DOCKER_SERVICE: "conanmsvc14"
 
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
