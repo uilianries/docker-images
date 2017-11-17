@@ -41,44 +41,11 @@ RUN $ErrorActionPreference = 'Stop'; \
     $p = Start-Process -Wait -PassThru -FilePath C:\vs_buildtools.exe -ArgumentList '--quiet --nocache --wait --installPath C:\BuildTools'; \
     if ($ret = $p.ExitCode) { c:\collect.exe; throw ('Install failed with exit code 0x{0:x}' -f $ret) }
 
-ENV CMAKE_RELEASE 3.9
-ENV CMAKE_VERSION 3.9.6
-
-RUN $url = ('https://cmake.org/files/v{0}/cmake-{1}-win64-x64.msi' -f $env:CMAKE_RELEASE, $env:CMAKE_VERSION); \
-	  Write-Host ('Downloading {0} ...' -f $url); \
-	  Invoke-WebRequest -Uri $url -OutFile 'cmake.msi'; \
-	  \
-	  Write-Host 'Installing ...'; \
-    Start-Process msiexec -Wait \
-      -ArgumentList @( \
-        '/i', \
-        'cmake.msi', \
-        '/quiet', \
-        '/qn', \
-        'TARGETDIR=C:\CMake', \
-        'ALLUSERS=1', \
-        'ADDLOCAL=DefaultFeature,Extensions,TclTk,Tools,PrependPath' \
-        ); \
-	  \
-    $env:PATH = [Environment]::GetEnvironmentVariable('PATH', [EnvironmentVariableTarget]::Machine); \
-    \
-    Write-Host 'Verifying install ...'; \
-    Write-Host '  cmake --version'; cmake --version; \
-    \
-    Write-Host 'Removing ...'; \
-    Remove-Item cmake.msi -Force; \
-    \
-    Write-Host 'Complete.';
-
 ENV PYTHON_VERSION 2.7.14
 ENV PYTHON_RELEASE 2.7.14
 
 RUN $url = ('https://www.python.org/ftp/python/{0}/python-{1}.amd64.msi' -f $env:PYTHON_RELEASE, $env:PYTHON_VERSION); \
-	  Write-Host ('Downloading {0} ...' -f $url); \
 	  Invoke-WebRequest -Uri $url -OutFile 'python.msi'; \
-	  \
-	  Write-Host 'Installing ...'; \
-    # https://www.python.org/download/releases/2.4/msi/
     Start-Process msiexec -Wait \
       -ArgumentList @( \
         '/i', \
@@ -89,38 +56,41 @@ RUN $url = ('https://www.python.org/ftp/python/{0}/python-{1}.amd64.msi' -f $env
         'ALLUSERS=1', \
         'ADDLOCAL=DefaultFeature,Extensions,TclTk,Tools,PrependPath' \
         ); \
-	  \
-    # the installer updated PATH, so we should refresh our local value
     $env:PATH = [Environment]::GetEnvironmentVariable('PATH', [EnvironmentVariableTarget]::Machine); \
-    \
-    Write-Host 'Verifying install ...'; \
-    Write-Host '  python --version'; python --version; \
-    \
-    Write-Host 'Removing ...'; \
-    Remove-Item python.msi -Force; \
-    \
-    Write-Host 'Complete.';
+    Remove-Item python.msi -Force;
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 ENV PYTHON_PIP_VERSION 9.0.1
 
-RUN Write-Host ('Installing pip=={0} ...' -f $env:PYTHON_PIP_VERSION); \
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
     Invoke-WebRequest -Uri 'https://bootstrap.pypa.io/get-pip.py' -OutFile 'get-pip.py'; \
     python get-pip.py \
         --disable-pip-version-check \
         --no-cache-dir \
         ('pip=={0}' -f $env:PYTHON_PIP_VERSION) \
     ; \
-    Remove-Item get-pip.py -Force; \
-    \
-    Write-Host 'Verifying pip install ...'; \
-    pip --version; \
-    \
-    Write-Host 'Complete.';
+    Remove-Item get-pip.py -Force;
 
 # install "conan", since the vast majority of users of this image will want it
 RUN pip install --no-cache-dir conan conan-package-tools
+
+ENV CMAKE_RELEASE 3.9
+ENV CMAKE_VERSION 3.9.6
+
+RUN $url = ('https://cmake.org/files/v{0}/cmake-{1}-win64-x64.msi' -f $env:CMAKE_RELEASE, $env:CMAKE_VERSION); \
+	  Invoke-WebRequest -Uri $url -OutFile 'cmake.msi'; \
+    Start-Process msiexec -Wait \
+      -ArgumentList @( \
+        '/i', \
+        'cmake.msi', \
+        '/quiet', \
+        '/qn', \
+        'TARGETDIR=C:\Program Files\CMake\', \
+        'ALLUSERS=1', \
+        'ADDLOCAL=Program,Dictionaries' \
+        ); \
+    $env:PATH = [Environment]::GetEnvironmentVariable('PATH', [EnvironmentVariableTarget]::Machine); \
+    Remove-Item cmake.msi -Force;
 
 # Use shell form to start developer command prompt and any other commands specified
 SHELL ["cmd.exe", "/s", "/c"]
