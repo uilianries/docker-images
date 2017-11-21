@@ -1,5 +1,3 @@
-# Copyright (C) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 FROM microsoft/windowsservercore:10.0.14393.1884
 
 LABEL maintainer="Uilian Ries <uilianries@gmail.com>"
@@ -17,15 +15,6 @@ RUN pip install --no-cache-dir conan conan-package-tools win-unicode-console
 
 RUN choco install --yes cmake --installargs 'ADD_CMAKE_TO_PATH=""System""'
 
-RUN choco install --yes vcbuildtools --execution-timeout=5400
+RUN choco install --yes --execution-timeout=7200 vcbuildtools -ia "/Full"
 
-RUN Write-Host 'Updating PATH ...'; \
-    $env:PATH = 'C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\Tools;' + $env:PATH; \
-    [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine);
-
-# Use shell form to start developer command prompt and any other commands specified
-SHELL ["cmd.exe", "/s", "/c"]
-ENTRYPOINT "VsDevCmd.bat" &&
-
-# Default to PowerShell console running within developer command prompt environment
 CMD ["cmd.exe"]

@@ -42,7 +42,7 @@ services:
         build:
             context: msvc14
             dockerfile: Dockerfile
-        image: "${DOCKER_USERNAME}/conanmsvc15:${DOCKER_BUILD_TAG}"
+        image: "${DOCKER_USERNAME}/conanmsvc14:${DOCKER_BUILD_TAG}"
         container_name: conanmsvc14
         tty: true
         stdin_open: true

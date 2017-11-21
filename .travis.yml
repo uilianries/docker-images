@@ -15,4 +15,4 @@ env:
     - DOCKER_SERVICE="conangcc47"
 
 script:
-  - python scripts/run.py
+  - travis_wait python scripts/run.py
