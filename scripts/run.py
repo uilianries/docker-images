@@ -27,6 +27,9 @@ class Runner(object):
 
     def test(self):
         try:
+            if platform.system() == "Windows":
+                subprocess.check_call(["Remove-ContainerNetwork", "-Name", "nat", "-force"])
+
             subprocess.check_call(["docker-compose", "up", "-d", self.service])
             subprocess.check_call(["docker-compose", "exec", self.service, "sudo", "pip", "install", "-U", "conan_package_tools"])
             subprocess.check_call(["docker-compose", "exec", self.service, "sudo", "pip", "install", "-U", "conan"])
