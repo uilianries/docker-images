@@ -16,6 +16,7 @@ environment:
 
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
+  - ps: Get-NetNat | Remove-NetNat
 
 test_script:
   - python scripts/run.py
