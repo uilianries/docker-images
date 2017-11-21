@@ -16,7 +16,9 @@ environment:
 
 install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
-  - ps: Get-NetNat | Remove-NetNat
+
+before_test:
+  - ps: Remove-ContainerNetwork -Name nat -force
 
 test_script:
   - python scripts/run.py
