@@ -28,11 +28,12 @@ class Runner(object):
 
     def test(self):
         try:
-            sudo = "" if platform.system() == "Windows" else "sudo"
+			update_command = ["docker", "exec", self.service, "sudo", "pip", "install", "-U", "conan"]
+            if platform.system() == "Windows":
+				update_command.remove("sudo")
 
             subprocess.check_call(["docker", "run", "-t", "-d", "--name", self.service, self.image])
-            subprocess.check_call(["docker", "exec", self.service, sudo, "pip", "install", "-U", "conan_package_tools"])
-            subprocess.check_call(["docker", "exec", self.service, sudo, "pip", "install", "-U", "conan"])
+			subprocess.check_call(update_command)
             subprocess.check_call(["docker", "exec", self.service, "conan", "user"])
 
             if self.cross_building:
