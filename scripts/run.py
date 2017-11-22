@@ -21,42 +21,41 @@ class Runner(object):
         version_match = re.match(r"\D+(\d+).*", self.service)
         self.compiler_version = version_match.group(1) if platform.system() == "Windows" else '.'.join(version_match.group(1))
         self.cross_building = "arm" in self.service
+        self.image = "%s/%s" % (self.username, self.service)
 
     def build(self):
         subprocess.check_call(["docker-compose", "build", self.service])
 
     def test(self):
         try:
-            if platform.system() == "Windows":
-                subprocess.check_call(["Remove-ContainerNetwork", "-Name", "nat", "-force"])
-
-            subprocess.check_call(["docker-compose", "up", "-d", self.service])
-            subprocess.check_call(["docker-compose", "exec", self.service, "sudo", "pip", "install", "-U", "conan_package_tools"])
-            subprocess.check_call(["docker-compose", "exec", self.service, "sudo", "pip", "install", "-U", "conan"])
-            subprocess.check_call(["docker-compose", "exec", self.service, "conan", "user"])
+            subprocess.check_call(["docker", "run", "-t", "-d", "--name", self.service, self.image])
+            subprocess.check_call(["docker", "exec", self.service, "sudo", "pip", "install", "-U", "conan_package_tools"])
+            subprocess.check_call(["docker", "exec", self.service, "sudo", "pip", "install", "-U", "conan"])
+            subprocess.check_call(["docker", "exec", self.service, "conan", "user"])
 
             if self.cross_building:
-                subprocess.check_call(["docker-compose", "run", "-e", "CC=arm-linux-gnueabihf-gcc", "-e", "CXX=arm-linux-gnueabihf-g++",
+                subprocess.check_call(["docker", "exec", "-e", "CC=arm-linux-gnueabihf-gcc", "-e", "CXX=arm-linux-gnueabihf-g++",
                                         self.service, "conan", "install", "zlib/1.2.11@conan/stable",
                                         "-s", "arch=armv7", "-s", "compiler=gcc", "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
             else:
-                subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
+                subprocess.check_call(["docker", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
                                         "-s", "arch=x86", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
-                subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
+                subprocess.check_call(["docker", "exec", self.service, "conan", "install", "zlib/1.2.11@conan/stable",
                                     "-s", "arch=x86_64", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                     "--build"])
-                subprocess.check_call(["docker-compose", "exec", self.service, "conan", "remote", "add", "conan-community",
+                subprocess.check_call(["docker", "exec", self.service, "conan", "remote", "add", "conan-community",
                                    "https://api.bintray.com/conan/conan-community/conan", "--insert"])
-                subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "gtest/1.8.0@conan/stable",
+                subprocess.check_call(["docker", "exec", self.service, "conan", "install", "gtest/1.8.0@conan/stable",
                                         "-s", "arch=x86_64", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
-                subprocess.check_call(["docker-compose", "exec", self.service, "conan", "install", "gtest/1.8.0@conan/stable",
+                subprocess.check_call(["docker", "exec", self.service, "conan", "install", "gtest/1.8.0@conan/stable",
                                         "-s", "arch=x86", "-s", "compiler=%s" % self.compiler, "-s", "compiler.version=%s" % self.compiler_version,
                                         "--build"])
         finally:
-            subprocess.call(["docker-compose", "rm", "-sf"])
+            subprocess.call(["docker", "stop", self.service])
+            subprocess.call(["docker", "rm", self.service])
 
     def deploy(self):
         if not self.upload:
