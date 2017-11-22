@@ -18,4 +18,4 @@ install:
   - set PATH=%PATH%;%PYTHON%/Scripts/
 
 test_script:
-  - ps: python scripts/run.py
+  - python scripts/run.py
