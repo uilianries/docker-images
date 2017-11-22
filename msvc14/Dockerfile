@@ -6,7 +6,8 @@ SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 
 ENV chocolateyUseWindowsCompression=false \
     PYTHONIOENCODING=UTF-8 \
-    VS140COMNTOOLS="C:\\Program Files (x86)\\Microsoft Visual Studio\\2015\\BuildTools\\Common7\\Tools\\"
+    VS140COMNTOOLS="C:\\Program Files (x86)\\Microsoft Visual Studio\\2015\\BuildTools\\Common7\\Tools\\" \
+    CONAN_USER_HOME="C:\\Users\\ContainerAdministrator"
 
 RUN Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
