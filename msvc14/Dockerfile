@@ -18,4 +18,6 @@ RUN choco install --yes --execution-timeout=7200 vcbuildtools -ia "/Full"
 
 RUN mkdir "C:\.conan"
 WORKDIR "C:\Users\ContainerAdministrator"
-CMD ["powershell.exe", "-nologo"]
+#SHELL ["cmd.exe", "/s", "/c"]
+ENTRYPOINT ["cmd.exe", "C:\\Program Files (x86)\\Microsoft Visual C++ Build Tools\\vcbuildtools_msbuild.bat"]
+
