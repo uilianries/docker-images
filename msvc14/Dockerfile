@@ -16,6 +16,6 @@ RUN choco install --yes cmake --installargs 'ADD_CMAKE_TO_PATH=""System""'
 
 RUN choco install --yes --execution-timeout=7200 vcbuildtools -ia "/Full"
 
-RUN mkdir C:\.conan
-WORKDIR C:\Users\ContainerAdministrator
+RUN mkdir "C:\.conan"
+WORKDIR "C:\Users\ContainerAdministrator"
 CMD ["powershell.exe", "-nologo"]
