@@ -9,7 +9,7 @@ import re
 class Runner(object):
 
     def __init__(self):
-        self.username = os.getenv("DOCKER_USERNAME", "")
+        self.username = os.getenv("DOCKER_USERNAME", "uilianries")
         self.password = os.getenv("DOCKER_PASSWORD", "").replace('"', '\\"')
         self.upload = os.getenv("DOCKER_UPLOAD", False)
         travis_branch = os.getenv("TRAVIS_BRANCH", "")
