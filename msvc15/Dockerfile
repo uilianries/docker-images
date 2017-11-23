@@ -14,8 +14,8 @@ RUN pip install --no-cache-dir conan conan-package-tools win-unicode-console
 
 RUN choco install --yes cmake --installargs 'ADD_CMAKE_TO_PATH=""System""'
 
-RUN choco install --yes visualstudio2017buildtools
-RUN choco install --yes visualstudio2017-workload-vctools
+RUN choco install --yes visualstudio2017buildtools --pacakge-parameters "--includeRecommend --includeOptional"
+RUN choco install --yes visualstudio2017-workload-vctools "--includeRecommend --includeOptional"
 
 RUN mkdir "C:\.conan"
 WORKDIR "C:\Users\ContainerAdministrator"
