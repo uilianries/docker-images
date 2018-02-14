@@ -1,4 +1,4 @@
-FROM microsoft/windowsservercore:10.0.14393.1884
+FROM microsoft/nanoserver:10.0.14393.2068
 
 LABEL maintainer="Uilian Ries <uilianries@gmail.com>"
 
@@ -6,7 +6,7 @@ SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 
 ENV chocolateyUseWindowsCompression=false \
     PYTHONIOENCODING=UTF-8
-	
+
 RUN Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 RUN choco install --yes python2  --params '"/InstallDir:C:\tools\python27"'

@@ -1,19 +1,9 @@
-build: false
-
-environment:
-    PYTHON: "C:\\Python27"
-    PYTHON_VERSION: "2.7.8"
-    PYTHON_ARCH: "32"
-    DOCKER_UPLOAD: "TRUE"
-
-    matrix:
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          DOCKER_SERVICE: "conanmsvc15"
-        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-          DOCKER_SERVICE: "conanmsvc14"
+version: 1.0.{build}
+image: Visual Studio 2017
 
 install:
-  - set PATH=%PATH%;%PYTHON%/Scripts/
+  - docker version
 
-test_script:
-  - python scripts/run.py
+build_script:
+  - cd msvc15
+  - docker build -t uilianries/conanmsvc15:latest .
