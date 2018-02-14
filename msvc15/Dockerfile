@@ -7,7 +7,8 @@ SHELL ["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command"]
 ENV chocolateyUseWindowsCompression=false \
     PYTHONIOENCODING=UTF-8
 
-RUN Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+RUN Invoke-WebRequest -Uri https://chocolatey.org/install.ps1 -OutFile install.ps1
+RUN ./install.ps1
 
 RUN choco install --yes python2  --params '"/InstallDir:C:\tools\python27"'
 RUN pip install --no-cache-dir conan conan-package-tools win-unicode-console
